@@ -30,9 +30,9 @@
 
 <script>
 // @ is an alias to /src
-import Prices from "@/components/Prices.vue";
-import Chart from "@/components/Chart.vue";
-import Activities from "@/components/Activities.vue";
+import Prices from "@/components/graphql/Prices.vue";
+import Chart from "@/components/graphql/Chart.vue";
+import Activities from "@/components/graphql/Activities.vue";
 
 export default {
   name: "Home",
