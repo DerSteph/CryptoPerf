@@ -39,6 +39,10 @@ export default {
         this.error = error.message;
       },
       result({ data }) {
+        if (this.series.length > 0 || this.chartOptions.labels > 0) {
+          this.series = [];
+          this.chartOptions.labels = [];
+        }
         if (data.allCoinAmountsByUUID == null) {
           this.$emit("unknownuuid", true);
           this.error == true;
@@ -50,6 +54,7 @@ export default {
             this.loading = false;
           });
         }
+        this.loading = false;
       },
     },
   },
@@ -64,6 +69,11 @@ export default {
       series: [],
       routeParam: this.$route.params.uuid,
     };
+  },
+  methods: {
+    async reload() {
+      await this.$apollo.queries.allCoinAmountsByUUID.refetch();
+    },
   },
 };
 </script>

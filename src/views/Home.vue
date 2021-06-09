@@ -4,11 +4,10 @@
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
+      {{ loading }}
     </div>
-    <div v-if="unknownUUID" class="d-flex justify-content-center">
-      <div class="alert alert-danger" role="alert">
-        unknown uuid
-      </div>
+    <div v-if="unknownUUID && !noUUID" class="d-flex justify-content-center">
+      <div class="alert alert-danger" role="alert">unknown uuid</div>
     </div>
     <div class="container" v-else>
       <div class="row">
@@ -16,12 +15,12 @@
           <Prices @loaded="loaded" />
         </div>
         <div class="col">
-          <Chart @unknownuuid="notKnown" @loaded="loaded" />
+          <Chart @unknownuuid="notKnown" @loaded="loaded" ref="chart" />
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <Activities @loaded="loaded" />
+          <Activities @loaded="loaded" @reload="reload"/>
         </div>
       </div>
     </div>
@@ -40,6 +39,7 @@ export default {
     return {
       unknownUUID: false,
       loading: true,
+      noUUID: false,
     };
   },
   components: {
@@ -48,10 +48,13 @@ export default {
     Activities,
   },
   mounted() {
-    this.loading = true;
+    this.loading = false;
   },
   created() {
-    this.loading = false;
+    this.loading = true;
+    if (this.$route.params.uuid == null) {
+      this.noUUID = true;
+    }
   },
   methods: {
     notKnown(value) {
@@ -64,6 +67,9 @@ export default {
       //console.log("Schalte aus");
       this.loading = false;
     },
+    reload() {
+      this.$refs.chart.reload();
+    }
   },
 };
 </script>

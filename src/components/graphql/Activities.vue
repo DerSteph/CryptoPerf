@@ -7,6 +7,7 @@
       <table class="table">
         <thead>
           <tr>
+            <th></th>
             <th>ID</th>
             <th>Activity Type</th>
             <th>Cryptocurrency</th>
@@ -23,13 +24,14 @@
               'table-danger': activity.activityType == 'remove',
             }"
           >
+            <td><RemoveActivity v-bind:id="activity.id" /></td>
             <td>{{ activity.id }}</td>
             <td>{{ activity.activityType }}</td>
             <td>{{ activity.cryptocurrency }}</td>
             <td>{{ activity.amount }}</td>
-            <td>{{ activity.date }}</td>
+            <td>{{ new Date(activity.date).toUTCString() }}</td>
           </tr>
-          <AddActivity />
+          <AddActivity @reloadActivityAndGraph="reload" />
         </tbody>
       </table>
     </div>
@@ -38,10 +40,12 @@
 <script>
 import gql from "graphql-tag";
 import AddActivity from "@/components/AddActivity.vue";
+import RemoveActivity from "@/components/RemoveActivity.vue";
 
 export default {
   components: {
     AddActivity,
+    RemoveActivity,
   },
   apollo: {
     listAllActivitiesByUUID: {
@@ -63,7 +67,6 @@ export default {
       },
       error(error) {
         this.$emit("unknownuuid", true);
-        console.error("test", error.message);
         this.error = error.message;
       },
       result({ data }) {
@@ -73,6 +76,14 @@ export default {
         }
       },
     },
+  },
+  methods: {
+    async reload() {
+      await this.$apollo.queries.listAllActivitiesByUUID.refetch();
+      this.$emit("reload");
+    }
+  },
+  computed: {
   },
   data() {
     return {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import CreatePortfolio from '../views/CreatePortfolio.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,11 @@ const routes = [
     path: '/uuid/:uuid',
     name: 'UUID',
     component: Home
+  },
+  {
+    path: '/createPortfolio',
+    name: 'createPortfolio',
+    component: CreatePortfolio
   },
   {
     path: '/about',
