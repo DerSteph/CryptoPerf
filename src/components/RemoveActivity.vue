@@ -1,5 +1,5 @@
 <template>
-  <button class="btn btn-danger">{{ id }}</button>
+  <button class="btn btn-danger" v-on:click="remove">{{ id }}</button>
 </template>
 <script>
 import gql from "graphql-tag";
@@ -30,5 +30,10 @@ export default {
     },
   },
   props: ["id"],
+  methods: {
+    remove() {
+      
+    }
+  }
 };
 </script>
