@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1>Value</h1>
+    <h1>Value</h1>
     <table class="table">
       <thead>
         <tr>
@@ -10,12 +10,18 @@
         </tr>
       </thead>
       <tbody>
-          <tr v-for="(coins, index) in allCoinAmountsByUUID" :key="index">
-            <td>{{coins.cryptocurrency}}</td>
-            <td>{{coins.amount}}</td>
-            <td>{{coins.value}}</td>
+        <tr v-for="(coins, index) in allCoinAmountsByUUID" :key="index">
+          <td>{{ coins.cryptocurrency }}</td>
+          <td>{{ coins.amount }}</td>
+          <td>{{ coins.value }}</td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+            <td colspan="2">Total:</td>
+            <td>{{fullAmount}}</td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </template>
@@ -44,21 +50,20 @@ export default {
         this.error = error.message;
       },
       result({ data }) {
-        this.Cryptocurrencies = data.__schema.types.find(
-          (o) => o.name === "Cryptocurrency"
-        ).enumValues;
-        this.ActivityTypes = data.__schema.types.find(
-          (o) => o.name === "ActivityType"
-        ).enumValues;
+          this.fullAmount = 0;
+          data.allCoinAmountsByUUID.forEach(element => {
+              this.fullAmount = this.fullAmount + element.value;
+          });
       },
     },
   },
-      data() {
-      return {
-        error: null,
-        routeParam: this.$route.params.uuid,
-        allCoinAmountsByUUID: [],
-      };
-    },
+  data() {
+    return {
+      error: null,
+      routeParam: this.$route.params.uuid,
+      allCoinAmountsByUUID: [],
+      fullAmount: 0,
+    };
+  },
 };
 </script>

@@ -68,6 +68,7 @@ import Prices from "@/components/graphql/Prices.vue";
 import Chart from "@/components/graphql/Chart.vue";
 import Activities from "@/components/graphql/Activities.vue";
 import PortfolioValue from "@/components/graphql/PortfolioValue.vue";
+import gql from "graphql-tag";
 
 export default {
   name: "Home",
@@ -77,6 +78,7 @@ export default {
       loading: true,
       noUUID: false,
       uuid: null,
+      preferences: null,
     };
   },
   components: {
@@ -92,6 +94,21 @@ export default {
     this.loading = true;
     if (this.$route.params.uuid == null) {
       this.noUUID = true;
+    } else {
+      var query = this.$apollo.query({
+        query: gql`
+          query ($uuid: String!) {
+            preferences(uuid: $uuid) {
+              favoriteFiatcurrency
+            }
+          }
+        `,
+        variables: {
+          uuid: this.$route.params.uuid,
+        },
+      });
+      this.preferences = query.data.preferences;
+      console.log(this.preferences);
     }
   },
   watch: {
